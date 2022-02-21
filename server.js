@@ -1,9 +1,12 @@
+// requires the express module
 const express = require('express');
+// calls the express function to start a new application
 var app = express();
+// requires the modules needed
 const path = require("path");
 const fs = require("fs");
 var cors = require('cors');
-//APPLICATION MIDDLEWARES
+//application middlewares
 app.use(cors())
 app.use(express.json());
 app.use(function (req, res, next) {
@@ -20,12 +23,13 @@ app.use(function (req, res, next) {
             next();
             return;
         }
+        // if the fie exists, send the file if not continue to the next middleware
         if (fileInfo.isFile()) res.sendFile(filePath);
         else next();
     });
 });
 
-
+// connects to mongodb
 const {MongoClient} = require("mongodb");
 const ObjectID = require('mongodb').ObjectID;
 const uri = "mongodb+srv://joseph:cstweb@cluster0.h3rm5.mongodb.net/cstweb?retryWrites=true&w=majority";
@@ -38,7 +42,7 @@ MongoClient.connect(uri, (err, client) => {
     }
 });
 
-
+// gets the mongodb collection name
 app.param('collectionName', (req, res, next, collectionName) => {
     req.collection = db.collection(collectionName);
     return next()
