@@ -48,11 +48,12 @@ app.param('collectionName', (req, res, next, collectionName) => {
     return next()
 });
 
+// allows to specify a collection name in the url
 app.get('/', (req, res, next) => {
     res.send('Select a collection, e.g., /collection/messages');
 });
 
-
+// retrieves collection
 app.get('/collection/:collectionName', (req, res, next) => {
     req.collection.find({}).toArray((e, results) => {
         if (e) return next(e)
@@ -60,6 +61,7 @@ app.get('/collection/:collectionName', (req, res, next) => {
     })
 });
 
+// adds the product information in the body of the request
 app.post('/collection/:collectionName', (req, res, next) => {
     req.collection.insert(req.body, (e, results) => {
         if (e) return next(e);
@@ -68,6 +70,7 @@ app.post('/collection/:collectionName', (req, res, next) => {
     })
 })
 
+// retrieves an object with a specific id
 app.put('/collection/:collectionName/:id', (req, res, next) => {
     req.collection.update(
         { _id: new ObjectID(req.params.id) },
